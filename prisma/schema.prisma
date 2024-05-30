@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  profile   Profile?
+  budgets   Budget[]
+  expenses  Expense[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Theme     Theme?
+}
+
+model Profile {
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  userId    Int    @unique
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model Budget {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  name      String
+  amount    Float
+  type      BudgetType
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Expense   Expense[]
+}
+
+enum BudgetType {
+  MONTHLY
+  YEARLY
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  budgetId  Int?
+  budget    Budget?  @relation(fields: [budgetId], references: [id])
+  name      String
+  amount    Float
+  category  String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Theme {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique
+  user       User     @relation(fields: [userId], references: [id])
+  name       String
+  primary    String
+  secondary  String
+  background String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
