@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "theme": "default",
+      "budgets": [
+        {
+          "year": 2024,
+          "month": 5,
+          "totalBudget": 5000,
+          "expenses": [
+            {
+              "category": "Food",
+              "amount": 250,
+              "date": "2024-05-01T12:00:00.000Z",
+              "description": "Grocery shopping"
+            },
+            {
+              "category": "Utilities",
+              "amount": 150,
+              "date": "2024-05-03T12:00:00.000Z",
+              "description": "Electricity bill"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

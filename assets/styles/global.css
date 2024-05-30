@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar {
+  width: 250px;
+  display: block;
+}
+
+.mobile-navbar {
+  display: none;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .mobile-navbar {
+    display: block;
+  }
+}

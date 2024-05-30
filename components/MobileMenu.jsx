@@ -8,14 +8,19 @@ import {
   Hourglass,
   NotebookPen,
   Settings,
-} from 'lucide-react'; // Ensure you have the X icon for closing the menu
+  User,
+} from 'lucide-react';
 
-const MobileNavbar = ({ isMobileMenuOpen, isActive }) => {
+const MobileMenu = ({ isMobileMenuOpen, isActive }) => {
   return (
     isMobileMenuOpen && (
-      <div className='absolute top-16 left-0 h-screen w-60 md:hidden flex flex-col space-y-6 py-3 px-4 bg-gray-800 text-white'>
-        <div className='flex flex-col h-full justify-between'>
-          <ul className=' md:flex md:flex-col gap-5 mt-4 md:mt-0'>
+      <div
+        className={`transition-all ease-linear duration-300 ${
+          isMobileMenuOpen ? 'block' : 'hidden'
+        } bg-gray-800 text-white w-72`}
+      >
+        <div className='flex flex-col space-y-6 py-3 px-4'>
+          <ul className='space-y-5'>
             <li>
               <Link
                 href='/'
@@ -133,6 +138,21 @@ const MobileNavbar = ({ isMobileMenuOpen, isActive }) => {
                 Help
               </Link>
             </li>
+            <li>
+              <Link
+                href='/auth'
+                className={`flex justify-start items-center py-3 px-5 rounded transition duration-200 gap-4 ${
+                  isActive('/auth') ? 'bg-gray-700' : 'hover:bg-gray-700'
+                }`}
+                aria-current={isActive('/auth') ? 'page' : undefined}
+              >
+                <User
+                  aria-label='Auth'
+                  style={{ color: isActive('/auth') ? 'green' : 'inherit' }}
+                />
+                Login/Register
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -140,4 +160,4 @@ const MobileNavbar = ({ isMobileMenuOpen, isActive }) => {
   );
 };
 
-export default MobileNavbar;
+export default MobileMenu;

@@ -6,16 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.3",
+    "cookie": "^0.6.0",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.379.0",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
@@ -23,6 +27,8 @@
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "validator": "^13.12.0",
     "yup": "^1.4.0",
     "zustand": "^4.5.2"
   },

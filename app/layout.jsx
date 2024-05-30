@@ -1,5 +1,6 @@
 import '@/assets/styles/global.css';
 import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
 import { Roboto } from 'next/font/google';
 
 const roboto_init = Roboto({
@@ -18,10 +19,9 @@ const MainLayout = ({ children }) => {
   return (
     <html lang='en' className={roboto_init}>
       <body>
-        <div className='flex'>
-          <Navbar />
-          <main className='flex-1'>{children}</main>
-        </div>
+        <Sidebar />
+        <Navbar />
+        <main>{children}</main>
       </body>
     </html>
   );
