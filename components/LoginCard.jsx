@@ -7,6 +7,7 @@ import { ToggleRight } from 'lucide-react';
 import { signIn, useSession } from 'next-auth/react';
 
 import toast from 'react-hot-toast';
+import ButtonWithSpinner from './ButtonSpinner';
 
 const LoginCard = ({ toggleForm }) => {
   const router = useRouter();
@@ -78,8 +79,8 @@ const LoginCard = ({ toggleForm }) => {
   };
 
   return (
-    <div className='border-2 md:w-[800px] h-auto p-10 rounded-2xl bg-gray-800 text-black'>
-      <div className='flex justify-center items-center mt-4'>
+    <div className='border-2 w-[800px] h-auto p-20 rounded-2xl bg-gray-800 text-black'>
+      <div className='flex justify-center items-center'>
         <div
           className='cursor-pointer  text-gray-400 hover:text-green-500'
           onClick={toggleForm}
@@ -137,7 +138,7 @@ const LoginCard = ({ toggleForm }) => {
             type='submit'
             disabled={loading}
           >
-            Login
+            {loading ? <ButtonWithSpinner /> : 'Login'}
           </button>
         </div>
       </form>

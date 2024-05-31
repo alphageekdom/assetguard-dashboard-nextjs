@@ -26,7 +26,7 @@ const MainLayout = ({ children }) => {
           <Sidebar />
           <div className='flex flex-col flew-grow w-full'>
             <Navbar />
-            <main className='flex-grow p-4'>{children}</main>
+            <main className='flex-grow'>{children}</main>
           </div>
           <ToasterConfig />
         </body>

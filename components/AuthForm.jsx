@@ -12,17 +12,12 @@ function AuthForm() {
   const switchToLogin = () => setIsLogin(true);
 
   return (
-    <div
-      className='flex justify-center items-center w-full'
-      style={{ minHeight: '100vh' }}
-    >
-      <div style={{ width: '800px' }}>
-        {isLogin ? (
-          <LoginCard isLogin={isLogin} toggleForm={toggleForm} />
-        ) : (
-          <RegisterCard toggleForm={toggleForm} switchToLogin={switchToLogin} />
-        )}
-      </div>
+    <div className='flex justify-center items-center h-full w-full md:max-w-2xl'>
+      {isLogin ? (
+        <LoginCard isLogin={isLogin} toggleForm={toggleForm} />
+      ) : (
+        <RegisterCard toggleForm={toggleForm} switchToLogin={switchToLogin} />
+      )}
     </div>
   );
 }
