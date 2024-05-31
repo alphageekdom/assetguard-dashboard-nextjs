@@ -3,6 +3,9 @@ import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import { Roboto } from 'next/font/google';
 
+import ToasterConfig from '@/components/ToasterConfig';
+import AuthProvider from '@/components/AuthProvider';
+
 const roboto_init = Roboto({
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -17,13 +20,18 @@ export const metadata = {
 
 const MainLayout = ({ children }) => {
   return (
-    <html lang='en' className={roboto_init}>
-      <body>
-        <Sidebar />
-        <Navbar />
-        <main>{children}</main>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang='en' className={roboto_init}>
+        <body className='flex'>
+          <Sidebar />
+          <div className='flex flex-col flew-grow w-full'>
+            <Navbar />
+            <main className='flex-grow p-4'>{children}</main>
+          </div>
+          <ToasterConfig />
+        </body>
+      </html>
+    </AuthProvider>
   );
 };
 

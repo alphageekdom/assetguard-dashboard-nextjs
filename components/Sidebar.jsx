@@ -15,15 +15,25 @@ import {
   Settings,
   User,
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 const Sidebar = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   const isActive = (path) => pathname === path;
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    toast.success('Successfully logged out');
+    router.replace('/');
+  };
 
   return (
     <div className='flex sidebar'>
@@ -233,33 +243,63 @@ const Sidebar = () => {
               </span>
             </Link>
           </li>
-          <li>
-            <Link
-              href='/auth'
-              className={`flex items-center ${
-                isCollapsed ? 'justify-center' : 'justify-start'
-              } ${
-                isCollapsed ? 'py-3' : 'py-3 px-5'
-              } rounded transition duration-200 ${
-                isActive('monthly-reports')
-                  ? 'bg-gray-700'
-                  : 'hover:bg-gray-700'
-              }`}
-              aria-current={isActive('/auth') ? 'page' : undefined}
-            >
-              <User
-                aria-label='Monthly Reports'
-                style={{
-                  color: isActive('/auth') ? 'green' : 'inherit',
-                }}
-              />
-              <span
-                className={`${isCollapsed ? 'hidden' : 'inline-block ml-4'}`}
+          {session ? (
+            <li>
+              <button
+                onClick={handleLogout}
+                className={`flex items-center ${
+                  isCollapsed ? 'justify-center' : 'justify-start'
+                } ${
+                  isCollapsed ? 'py-3' : 'py-3 px-5'
+                } rounded transition duration-200 ${
+                  isActive('monthly-reports')
+                    ? 'bg-gray-700'
+                    : 'hover:bg-gray-700'
+                }`}
+                aria-current={isActive('/auth') ? 'page' : undefined}
               >
-                Login/Register
-              </span>
-            </Link>
-          </li>
+                <User
+                  aria-label='Logout'
+                  style={{
+                    color: 'inherit',
+                  }}
+                />
+                <span
+                  className={`${isCollapsed ? 'hidden' : 'inline-block ml-4'}`}
+                >
+                  Logout
+                </span>
+              </button>
+            </li>
+          ) : (
+            <li>
+              <Link
+                href='/auth'
+                className={`flex items-center ${
+                  isCollapsed ? 'justify-center' : 'justify-start'
+                } ${
+                  isCollapsed ? 'py-3' : 'py-3 px-5'
+                } rounded transition duration-200 ${
+                  isActive('monthly-reports')
+                    ? 'bg-gray-700'
+                    : 'hover:bg-gray-700'
+                }`}
+                aria-current={isActive('/auth') ? 'page' : undefined}
+              >
+                <User
+                  aria-label='Monthly Reports'
+                  style={{
+                    color: isActive('/auth') ? 'green' : 'inherit',
+                  }}
+                />
+                <span
+                  className={`${isCollapsed ? 'hidden' : 'inline-block ml-4'}`}
+                >
+                  Login/Register
+                </span>
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </div>

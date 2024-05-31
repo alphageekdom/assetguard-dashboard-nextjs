@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { ToggleLeft, ToggleRight } from 'lucide-react';
 import RegisterCard from './RegisterCard';
 import LoginCard from './LoginCard';
 
@@ -9,6 +8,8 @@ function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => setIsLogin(!isLogin);
+
+  const switchToLogin = () => setIsLogin(true);
 
   return (
     <div
@@ -19,7 +20,7 @@ function AuthForm() {
         {isLogin ? (
           <LoginCard isLogin={isLogin} toggleForm={toggleForm} />
         ) : (
-          <RegisterCard isLogin={isLogin} toggleForm={toggleForm} />
+          <RegisterCard toggleForm={toggleForm} switchToLogin={switchToLogin} />
         )}
       </div>
     </div>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
-import Link from 'next/link';
 import { ToggleLeft } from 'lucide-react';
+import validator from 'validator';
 
-const RegisterCard = ({ isLogin, toggleForm }) => {
+import toast from 'react-hot-toast';
+
+const RegisterCard = ({ toggleForm, switchToLogin }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +14,7 @@ const RegisterCard = ({ isLogin, toggleForm }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,18 +28,35 @@ const RegisterCard = ({ isLogin, toggleForm }) => {
     e.preventDefault();
     setLoading(true);
 
+    // Validation
+    if (!validator.isEmail(formData.email)) {
+      toast.error('Please enter a valid email address.');
+      setLoading(false);
+      return;
+    }
+    if (!validator.isLength(formData.password, { min: 8 })) {
+      toast.error('Password must be at least 8 characters long.');
+      setLoading(false);
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const res = await fetch('/api/register', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sanitizedFormData),
+        body: JSON.stringify(formData),
       });
 
       if (res.ok) {
         toast.success('Registration Successful!');
-        router.push('/login');
+        switchToLogin();
       } else if (res.status === 409) {
         toast.error('Email Already In Use');
       } else {
@@ -52,7 +72,7 @@ const RegisterCard = ({ isLogin, toggleForm }) => {
   };
 
   return (
-    <div className='border-2  mx-auto md:w-[800px] h-auto p-6 sm:p-12 rounded-2xl'>
+    <div className='border-2  mx-auto md:w-[800px] h-auto p-6 sm:p-12 rounded-2xl bg-gray-800 '>
       <div className='flex justify-center items-center mt-4'>
         <div
           className='cursor-pointer p-2 text-gray-400 hover:text-green-500'
@@ -62,8 +82,8 @@ const RegisterCard = ({ isLogin, toggleForm }) => {
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <h2 className='text-3xl text-center font-semibold mb-6 col-span-2'>
-          Register Account
+        <h2 className='text-3xl text-center font-semibold mb-6 col-span-2 text-white'>
+          Register
         </h2>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-full'>

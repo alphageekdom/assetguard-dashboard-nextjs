@@ -3,18 +3,26 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import validator from 'validator';
-import { Link, ToggleRight } from 'lucide-react';
+import { ToggleRight } from 'lucide-react';
+import { signIn, useSession } from 'next-auth/react';
 
 import toast from 'react-hot-toast';
 
-const LoginCard = ({ isLogin, toggleForm }) => {
+const LoginCard = ({ toggleForm }) => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (session) {
+      router.replace('/');
+    }
+  }, [session, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,7 +46,7 @@ const LoginCard = ({ isLogin, toggleForm }) => {
     }
 
     try {
-      const res = await fetch('/api/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -49,8 +57,18 @@ const LoginCard = ({ isLogin, toggleForm }) => {
       if (!res.ok) {
         toast.error(data.message || 'Login failed. Please try again.');
       } else {
-        toast.success('Login successful');
-        router.push('/');
+        const result = await signIn('credentials', {
+          redirect: false,
+          email,
+          password,
+        });
+
+        if (result.error) {
+          toast.error(result.error || 'Login failed. Please try again.');
+        } else {
+          toast.success('Login successful');
+          router.replace('/');
+        }
       }
     } catch (error) {
       toast.error('Login failed. Please try again.');
@@ -60,17 +78,19 @@ const LoginCard = ({ isLogin, toggleForm }) => {
   };
 
   return (
-    <div className='border-2 md:w-[800px] h-auto p-20 rounded-2xl'>
+    <div className='border-2 md:w-[800px] h-auto p-10 rounded-2xl bg-gray-800 text-black'>
       <div className='flex justify-center items-center mt-4'>
         <div
-          className='cursor-pointer p-2 text-gray-400 hover:text-green-500'
+          className='cursor-pointer  text-gray-400 hover:text-green-500'
           onClick={toggleForm}
         >
           <ToggleRight size={34} />
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <h2 className='text-3xl text-center font-semibold mb-6'>Login</h2>
+        <h2 className='text-3xl text-center font-semibold mb-6 text-white'>
+          Login
+        </h2>
         {/* <!-- Email --> */}
         <div className='mb-4'>
           <label className='block text-gray-300 font-bold mb-2' htmlFor='email'>
